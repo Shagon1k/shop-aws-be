@@ -1,0 +1,7 @@
+{
+    "headers": {
+      "Content-Type": "application/json",
+      "origin": "http://localhost:3000"
+    },
+    "httpMethod": "GET"
+}

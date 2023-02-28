@@ -1,0 +1,18 @@
+{
+  "name": "shop-aws-be",
+  "version": "1.0.0",
+  "description": "Aliaksei Hurynovich AWS Shop server part",
+  "scripts": {
+    "deploy:product-service": "cd product-service && npm run deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shagon1k/shop-aws-be.git"
+  },
+  "author": "Aliaksei Hurynovich",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shagon1k/shop-aws-be/issues"
+  },
+  "homepage": "https://github.com/Shagon1k/shop-aws-be#readme"
+}

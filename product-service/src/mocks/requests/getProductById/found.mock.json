@@ -1,0 +1,10 @@
+{
+    "headers": {
+      "Content-Type": "application/json",
+      "origin": "http://localhost:3000"
+    },
+    "httpMethod": "GET",
+    "pathParameters": {
+        "productId" : "7567ec4b-b10c-48c5-9345-fc73c48a80a1"
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@functions/*": ["src/functions/*"],
+            "@functions": ["src/functions"],
+            "@libs/*": ["src/libs/*"],
+            "@types": ["src/types"],
+            "@constants": ["src/constants.ts"]
+        },
+        "lib": ["ESNext"],
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "target": "ES2020",
+        "outDir": "lib"
+    },
+    "include": ["src/**/*.ts", "serverless.ts"],
+    "exclude": ["node_modules/**/*", ".serverless/**/*", "_warmup/**/*", ".vscode/**/*"],
+    "ts-node": {
+        "require": ["tsconfig-paths/register"]
+    }
+}

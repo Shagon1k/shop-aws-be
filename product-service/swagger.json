@@ -1,0 +1,170 @@
+{
+    "openapi":"3.0.2",
+    "info": {
+      "title":"Aliaksei Hurynovich AWS Product Service API",
+      "description": "Documentation of AWS Product Service API (Coffee shop)",
+      "contact": {
+        "email": "shagon1k@gmail.com"
+      },
+      "version":"1.0"
+    },
+    "servers": [{
+        "url": "https://ejv63o8s93.execute-api.eu-west-1.amazonaws.com/dev/",
+        "description": "Main Product Service server"
+    }],
+    "paths": {
+        "/products": {
+            "get": {
+                "description": "Get available products list",
+                "responses": {
+                    "200": {
+                        "description": "Found available products list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Product"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{productId}": {
+            "get": {
+                "description": "Get product by ID",
+                "parameters": [{
+                    "name": "productId",
+                    "description": "Searched product ID",
+                    "in": "path",
+                    "required": true,
+                    "style": "simple",
+                    "explode": true,
+                    "schema": {
+                        "type": "string",
+                        "example": "7567ec4b-b10c-48c5-9345-fc73c48a80aa"
+                    },
+                    "examples": {
+                        "found": {
+                            "description": "200 - Product by passed ID found",
+                            "value": "7567ec4b-b10c-48c5-9345-fc73c48a80aa"
+                        },
+                        "not-found": {
+                            "description": "404 - Product not found",
+                            "value": "42"
+                        }
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Product by passed ID found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Product"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Error": {
+                "required": ["message"],
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "stack": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Product": {
+                "required": ["id", "title", "description", "price", "imgUrl"],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "123"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Columbian Roast"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Costa Coffee Nespresso Pods Columbian Roast Espresso"
+                    },
+                    "price": {
+                        "type": "number",
+                        "example": "42"
+                    },
+                    "imgUrl": {
+                        "type": "string",
+                        "format": "url",
+                        "example": "http://dummy-url-to-image.com/img.jpg"
+                    }
+                }
+            }
+        }
+    }
+}

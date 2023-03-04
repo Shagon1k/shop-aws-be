@@ -1,12 +1,10 @@
-import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb';
-import { unmarshall } from '@aws-sdk/util-dynamodb';
-import { type EventGETAPIGatewayProxyEvent } from '@types';
+import getProductsDbController from '@libs/products-db-controller'
 import { prepareResponse, checkIfOriginAllowed } from '@libs/api-gateway';
 import { RESP_STATUS_CODES } from '@constants';
-// Note: Mocked data used temporary
-// import { products } from '../../mocks/products.mock';
 
-export const MSG_PRODUCTS_FOUND = 'Coffee products list.';
+import { type EventGETAPIGatewayProxyEvent } from '@types';
+
+export const MSG_PRODUCTS_FOUND = 'Coffee Shop products list.';
 
 const getProductsList: EventGETAPIGatewayProxyEvent = async (event) => {
     const requestOrigin = event.headers.origin || '';
@@ -25,33 +23,8 @@ const getProductsList: EventGETAPIGatewayProxyEvent = async (event) => {
         // Request handle
         console.log('Get products Lambda triggered');
 
-        // TODO: START (move to DB service)
-        const dbClient = new DynamoDBClient({ region: process.env.DB_REGION });
-
-        const { Items: dbProducts = [] } = await dbClient.send(
-            new ScanCommand({
-                TableName: process.env.DYNAMO_PRODUCTS_TABLE_NAME || '',
-            })
-        );
-        const products = dbProducts.map((item) => unmarshall(item));
-
-        const { Items: dbStocks = [] } = await dbClient.send(
-            new ScanCommand({
-                TableName: process.env.DYNAMO_STOCKS_TABLE_NAME || '',
-            })
-        );
-        const stocks = dbStocks.map((item) => unmarshall(item));
-
-        const resultData = products.map((product) => {
-            const productStockCount = stocks.find(({ product_id }) => product.id === product_id)?.count;
-
-            return {
-                ...product,
-                count: productStockCount,
-            };
-        });
-        // TODO: END (move to DB service)
-
+        const productsDbController = getProductsDbController();
+        const resultData = await productsDbController.getProductsList();
         return prepareResponse(
             {
                 message: MSG_PRODUCTS_FOUND,

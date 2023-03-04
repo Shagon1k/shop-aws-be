@@ -1,24 +1,14 @@
-import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
-import { marshall } from '@aws-sdk/util-dynamodb';
-import { v4 as uuidV4 } from 'uuid';
+import getProductsDbController from '@libs/products-db-controller';
 import { prepareResponse, checkIfOriginAllowed } from '@libs/api-gateway';
-import { type EventPOSTAPIGatewayProxyEvent } from '@types';
 import { BaseError, BadRequestError } from '@libs/errors';
 import { RESP_STATUS_CODES } from '@constants';
 
-const DEFAULT_ITEM_STOCK_COUNT = 10;
+import { type EventPOSTAPIGatewayProxyEvent, type CreateProductBody } from '@types';
 
-export const MSG_PRODUCT_CREATED = 'Created new coffee product.';
-export const MSG_INVALID_PRODUCT_DATA = 'Invalid new coffee product data.';
+export const MSG_PRODUCT_CREATED = 'Created new Coffee Shop product.';
+export const MSG_INVALID_PRODUCT_DATA = 'Invalid new Coffee Shop product data.';
 
-export type CreateProductData = {
-    title: string;
-    description: string;
-    price: number;
-    imgUrl: string;
-};
-
-const isValidCreateProductData = (data: any): data is CreateProductData => {
+const isValidCreateProductBody = (data: any): data is CreateProductBody => {
     const { title, description, price, imgUrl } = data;
 
     return (
@@ -47,47 +37,16 @@ const getProductById: EventPOSTAPIGatewayProxyEvent<string> = async (event) => {
         const createProductBody = JSON.parse(event?.body);
         console.log('Create product Lambda triggered, body params: ', createProductBody);
 
-        if (!isValidCreateProductData(createProductBody)) {
+        if (!isValidCreateProductBody(createProductBody)) {
             throw new BadRequestError(MSG_INVALID_PRODUCT_DATA);
         }
 
-        // TODO: START (move to DB service)
-        const dbClient = new DynamoDBClient({ region: process.env.DB_REGION });
-
-        const createProductId = uuidV4();
-        const createProductData = {
-            id: createProductId,
-            ...createProductBody
-        }
-        const createProductDBData = marshall(createProductData);
-        await dbClient.send(
-            new PutItemCommand({
-                TableName: process.env.DYNAMO_PRODUCTS_TABLE_NAME || '',
-                Item: createProductDBData,
-            })
-        );
-
-        const createStockData = {
-            id: uuidV4(),
-            count: DEFAULT_ITEM_STOCK_COUNT,
-            product_id: createProductId,
-        }
-        const createStockDBData = marshall(createStockData);
-        await dbClient.send(
-            new PutItemCommand({
-                TableName: process.env.DYNAMO_STOCKS_TABLE_NAME || '',
-                Item: createStockDBData,
-            })
-        );
-        // TODO: END (move to DB service)
-
+        const productsDbController = getProductsDbController();
+        const createdData = await productsDbController.createProduct(createProductBody);
         return prepareResponse(
             {
                 message: MSG_PRODUCT_CREATED,
-                data: {
-                    product: createProductData,
-                    stock: createStockData,
-                },
+                data: createdData,
             },
             requestOrigin,
             RESP_STATUS_CODES.CREATED

@@ -54,6 +54,70 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "description": "Create new product",
+                "requestBody": {
+                    "description": "Create new product request body",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateProduct"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Product was created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Product"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid product data passed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/products/{productId}": {
@@ -146,6 +210,29 @@
                         "type": "string",
                         "example": "123"
                     },
+                    "title": {
+                        "type": "string",
+                        "example": "Columbian Roast"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Costa Coffee Nespresso Pods Columbian Roast Espresso"
+                    },
+                    "price": {
+                        "type": "number",
+                        "example": "42"
+                    },
+                    "imgUrl": {
+                        "type": "string",
+                        "format": "url",
+                        "example": "http://dummy-url-to-image.com/img.jpg"
+                    }
+                }
+            },
+            "CreateProduct": {
+                "required": ["title", "description", "price", "imgUrl"],
+                "type": "object",
+                "properties": {
                     "title": {
                         "type": "string",
                         "example": "Columbian Roast"

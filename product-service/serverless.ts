@@ -1,11 +1,11 @@
 import type { AWS } from '@serverless/typescript';
 
-import { getProductsList, getProductById } from '@functions';
+import { getProductsList, getProductById, createProduct } from '@functions';
 
 const serverlessConfiguration: AWS = {
     service: 'product-service',
     frameworkVersion: '3',
-    plugins: ['serverless-esbuild'],
+    plugins: ['serverless-esbuild', 'serverless-dotenv-plugin'],
     provider: {
         name: 'aws',
         runtime: 'nodejs14.x',
@@ -17,8 +17,27 @@ const serverlessConfiguration: AWS = {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
             NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
         },
+        iam: {
+            role: {
+                statements: [
+                    {
+                        Effect: 'Allow',
+                        Action: ['dynamodb:*'],
+                        Resource: [
+                            'arn:aws:dynamodb:eu-west-1:739296314197:table/coffee-shop-products',
+                            'arn:aws:dynamodb:eu-west-1:739296314197:table/coffee-shop-stocks',
+                            'arn:aws:dynamodb:eu-west-1:739296314197:table/coffee-shop-stocks/index/product_id-index',
+                        ],
+                    },
+                ],
+            },
+        },
     },
-    functions: { getProductsList, getProductById },
+    functions: {
+        getProductsList,
+        getProductById,
+        createProduct,
+    },
     package: { individually: true },
     custom: {
         esbuild: {

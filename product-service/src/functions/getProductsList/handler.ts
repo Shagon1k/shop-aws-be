@@ -1,17 +1,14 @@
-import { type EventGETAPIGatewayProxyEvent } from '@types';
+import getProductsDbController from '@libs/products-db-controller'
 import { prepareResponse, checkIfOriginAllowed } from '@libs/api-gateway';
 import { RESP_STATUS_CODES } from '@constants';
-// Note: Mocked data used temporary
-import { products } from '../../mocks/products.mock';
 
-export const MSG_PRODUCTS_FOUND = 'Coffee products list.';
+import { type EventGETAPIGatewayProxyEvent } from '@types';
+
+export const MSG_PRODUCTS_FOUND = 'Coffee Shop products list.';
 
 const getProductsList: EventGETAPIGatewayProxyEvent = async (event) => {
     const requestOrigin = event.headers.origin || '';
-
     try {
-        console.log('Get products Lambda triggered');
-
         // CORS not allowed fast return
         if (!checkIfOriginAllowed(requestOrigin)) {
             return prepareResponse(
@@ -23,10 +20,15 @@ const getProductsList: EventGETAPIGatewayProxyEvent = async (event) => {
             );
         }
 
+        // Request handle
+        console.log('Get products Lambda triggered');
+
+        const resultData = await getProductsDbController().getProductsList();
+
         return prepareResponse(
             {
                 message: MSG_PRODUCTS_FOUND,
-                data: products,
+                data: resultData,
             },
             requestOrigin,
             RESP_STATUS_CODES.OK

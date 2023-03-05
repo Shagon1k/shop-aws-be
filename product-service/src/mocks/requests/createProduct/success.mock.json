@@ -1,0 +1,13 @@
+{
+    "headers": {
+      "Content-Type": "application/json",
+      "origin": "http://localhost:3000"
+    },
+    "httpMethod": "POST",
+    "body": {
+        "title": "Some title",
+        "description": "Some description",
+        "price": 42,
+        "img_url": "https://some-url.com/some-image.jpg"
+    }
+}

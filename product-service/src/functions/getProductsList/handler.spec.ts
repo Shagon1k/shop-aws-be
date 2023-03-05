@@ -1,7 +1,9 @@
-import { type Context, type Callback } from 'aws-lambda';
 import getProductById, { MSG_PRODUCTS_FOUND } from './handler';
 import { prepareResponse, checkIfOriginAllowed } from '@libs/api-gateway';
 import { RESP_STATUS_CODES } from '@constants';
+import { products } from '../../mocks/products.mock';
+
+import { type Context, type Callback } from 'aws-lambda';
 
 jest.mock('@libs/api-gateway');
 jest.mock('../../mocks/products.mock', () => ({
@@ -11,6 +13,13 @@ jest.mock('../../mocks/products.mock', () => ({
         },
     ],
 }));
+
+jest.mock('@libs/products-db-controller', () => ({
+    __esModule: true,
+    default: () => ({
+        getProductsList: jest.fn(async () => products)
+    })
+}))
 
 describe('getProductsList lambda', () => {
     describe('when request origin is allowed', () => {

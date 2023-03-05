@@ -8,6 +8,7 @@
             "@types": ["src/types"],
             "@constants": ["src/constants.ts"]
         },
+        "resolveJsonModule": true,
         "lib": ["ESNext"],
         "moduleResolution": "node",
         "esModuleInterop": true,

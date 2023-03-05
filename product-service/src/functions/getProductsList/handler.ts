@@ -23,8 +23,8 @@ const getProductsList: EventGETAPIGatewayProxyEvent = async (event) => {
         // Request handle
         console.log('Get products Lambda triggered');
 
-        const productsDbController = getProductsDbController();
-        const resultData = await productsDbController.getProductsList();
+        const resultData = await getProductsDbController().getProductsList();
+
         return prepareResponse(
             {
                 message: MSG_PRODUCTS_FOUND,

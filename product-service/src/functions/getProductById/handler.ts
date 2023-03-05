@@ -31,8 +31,7 @@ const getProductById: EventGETAPIGatewayProxyEvent<AddProductPathParams> = async
         console.log('Get product by ID Lambda triggered, params: ', params);
 
         const productId = params?.productId || '';
-        const productsDbController = getProductsDbController();
-        const resultData = await productsDbController.getProductById(productId);
+        const resultData = await getProductsDbController().getProductById(productId);
 
         if (!resultData) {
             throw new NotFoundError(MSG_PRODUCT_NOT_FOUND);

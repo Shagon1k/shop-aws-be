@@ -94,7 +94,6 @@ const productsDbPgAdapter: IProductsDBController = {
 
             return resultData;
         } catch (error) {
-
             await dbClient.query('ROLLBACK') // rollback creation transaction
 
             // re-throw error outside to handle on lambda handler function

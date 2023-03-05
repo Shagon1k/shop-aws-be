@@ -41,8 +41,8 @@ const getProductById: EventPOSTAPIGatewayProxyEvent<string> = async (event) => {
             throw new BadRequestError(MSG_INVALID_PRODUCT_DATA);
         }
 
-        const productsDbController = getProductsDbController();
-        const createdData = await productsDbController.createProduct(createProductBody);
+        const createdData = await getProductsDbController().createProduct(createProductBody);
+
         return prepareResponse(
             {
                 message: MSG_PRODUCT_CREATED,

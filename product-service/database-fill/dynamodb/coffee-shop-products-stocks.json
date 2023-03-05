@@ -7,7 +7,7 @@
                     "title": {"S": "Columbian Roast"},
                     "description": {"S": "Costa Coffee Nespresso Pods Columbian Roast Espresso"},
                     "price": {"N": "12"},
-                    "imgUrl": {"S": "https://i.ibb.co/x5cjY3b/columbian-roast.jpg"}
+                    "img_url": {"S": "https://i.ibb.co/x5cjY3b/columbian-roast.jpg"}
                 }
             }
         },
@@ -18,7 +18,7 @@
                     "title": {"S": "Mocha Italia Signature"},
                     "description": {"S": "Costa Coffee Mocha Italia Signature Blend Lungo Nespresso"},
                     "price": {"N": "10"},
-                    "imgUrl": {"S": "https://i.ibb.co/HHGMQXY/Costa-Coffee-Mocha-Italia-Signature-Blend-Lungo-Nespresso-Capsules-x3-48057-1630089333-386-513.jpg"}
+                    "img_url": {"S": "https://i.ibb.co/HHGMQXY/Costa-Coffee-Mocha-Italia-Signature-Blend-Lungo-Nespresso-Capsules-x3-48057-1630089333-386-513.jpg"}
                 }
             }
         },
@@ -29,7 +29,7 @@
                     "title": {"S": "The Lively Blend"},
                     "description": {"S": "Costa Coffee Nespresso Pods Ristretto The Lively Blend"},
                     "price": {"N": "14"},
-                    "imgUrl": {"S": "https://i.ibb.co/F7Jzpgz/the-lively-blend.jpg"}
+                    "img_url": {"S": "https://i.ibb.co/F7Jzpgz/the-lively-blend.jpg"}
                 }
             }
         },
@@ -40,7 +40,7 @@
                     "title": {"S": "Signature Blend"},
                     "description": {"S": "Costa Coffee Nespresso Pods Ristretto The Lively Blend"},
                     "price": {"N": "12"},
-                    "imgUrl": {"S": "https://i.ibb.co/MMHRpQ2/signature-blend.jpg"}
+                    "img_url": {"S": "https://i.ibb.co/MMHRpQ2/signature-blend.jpg"}
                 }
             }
         },
@@ -51,7 +51,7 @@
                     "title": {"S": "Signature Blend Lungo"},
                     "description": {"S": "Costa Coffee Nespresso Pods Signature Blend Lungo"},
                     "price": {"N": "8"},
-                    "imgUrl": {"S": "https://i.ibb.co/nzV4dWG/signature-blend-lungo.jpg"}
+                    "img_url": {"S": "https://i.ibb.co/nzV4dWG/signature-blend-lungo.jpg"}
                 }
             }
         },
@@ -62,7 +62,7 @@
                     "title": {"S": "Starbucks Caffe Mocha"},
                     "description": {"S": "Starbucks Caffe Mocha Premium Instant Rich and Chocolatey"},
                     "price": {"N": "16"},
-                    "imgUrl": {"S": "https://i.ibb.co/J2rYzTt/starbucks-caffe-mocha.jpg"}
+                    "img_url": {"S": "https://i.ibb.co/J2rYzTt/starbucks-caffe-mocha.jpg"}
                 }
             }
         }

@@ -16,9 +16,9 @@ jest.mock('../../mocks/products.mock', () => ({
 
 jest.mock('@libs/products-db-controller', () => ({
     __esModule: true,
-    default: {
+    default: () => ({
         getProductById: jest.fn(async (productId) => products.find(({ id }) => id === productId))
-    }
+    })
 }))
 
 describe('getProductById lambda', () => {

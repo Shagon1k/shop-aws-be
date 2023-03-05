@@ -16,7 +16,7 @@ export interface CreateProductBody {
     title: string;
     description: string;
     price: number;
-    imgUrl: string;
+    img_url: string;
 }
 
 export interface CreatedProductData extends CreateProductBody {
@@ -34,6 +34,6 @@ export interface ProductData {
     title: string;
     description: string;
     price: number;
-    imgUrl: string;
+    img_url: string;
     count: number;
 }

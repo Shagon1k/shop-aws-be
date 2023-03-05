@@ -8,6 +8,6 @@
         "title": "Some title",
         "description": "Some description",
         "price": 42,
-        "imgUrl": "https://some-url.com/some-image.jpg"
+        "img_url": "https://some-url.com/some-image.jpg"
     }
 }

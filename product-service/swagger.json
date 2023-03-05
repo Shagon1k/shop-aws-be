@@ -203,7 +203,7 @@
                 }
             },
             "Product": {
-                "required": ["id", "title", "description", "price", "imgUrl"],
+                "required": ["id", "title", "description", "price", "img_url"],
                 "type": "object",
                 "properties": {
                     "id": {
@@ -222,7 +222,7 @@
                         "type": "number",
                         "example": "42"
                     },
-                    "imgUrl": {
+                    "img_url": {
                         "type": "string",
                         "format": "url",
                         "example": "http://dummy-url-to-image.com/img.jpg"
@@ -230,7 +230,7 @@
                 }
             },
             "CreateProduct": {
-                "required": ["title", "description", "price", "imgUrl"],
+                "required": ["title", "description", "price", "img_url"],
                 "type": "object",
                 "properties": {
                     "title": {
@@ -245,7 +245,7 @@
                         "type": "number",
                         "example": "42"
                     },
-                    "imgUrl": {
+                    "img_url": {
                         "type": "string",
                         "format": "url",
                         "example": "http://dummy-url-to-image.com/img.jpg"

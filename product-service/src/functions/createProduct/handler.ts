@@ -9,12 +9,12 @@ export const MSG_PRODUCT_CREATED = 'Created new Coffee Shop product.';
 export const MSG_INVALID_PRODUCT_DATA = 'Invalid new Coffee Shop product data.';
 
 const isValidCreateProductBody = (data: any): data is CreateProductBody => {
-    const { title, description, price, imgUrl } = data;
+    const { title, description, price, img_url } = data;
 
     return (
         typeof title === 'string' &&
         typeof description === 'string' &&
-        typeof imgUrl === 'string' &&
+        typeof img_url === 'string' &&
         Number.isFinite(price)
     );
 };

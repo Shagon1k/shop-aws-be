@@ -3,7 +3,7 @@ import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-l
 type POSTAPIGatewayProxyEvent<S> = Omit<APIGatewayProxyEvent, 'body'> & { body: S };
 export type EventPOSTAPIGatewayProxyEvent<S> = Handler<POSTAPIGatewayProxyEvent<S>, APIGatewayProxyResult>;
 
-export type GETAPIGatewayProxyEvent<P = void, Q = void> = Omit<
+type GETAPIGatewayProxyEvent<P = void, Q = void> = Omit<
     APIGatewayProxyEvent,
     'pathParameters' | 'queryStringParameters'
 > & { pathParameters?: P; queryStringParameters?: Q };

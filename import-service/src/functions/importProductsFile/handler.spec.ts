@@ -4,8 +4,6 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { prepareResponse, checkIfOriginAllowed } from '@libs/api-gateway';
 import { RESP_STATUS_CODES } from '@constants';
 
-// import { mockClient } from 'aws-sdk-client-mock';
-
 import { type Context, type Callback } from 'aws-lambda';
 
 jest.mock('@libs/api-gateway');

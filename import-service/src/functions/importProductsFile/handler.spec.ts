@@ -11,7 +11,7 @@ jest.mock('@aws-sdk/client-s3');
 jest.mock('@aws-sdk/s3-request-presigner')
 
 describe('importProductsFile lambda', () => {
-    xdescribe('when request origin is NOT allowed', () => {
+    describe('when request origin is NOT allowed', () => {
         beforeAll(() => {
             (checkIfOriginAllowed as jest.Mock).mockReturnValue(false);
         });
@@ -34,7 +34,7 @@ describe('importProductsFile lambda', () => {
             (checkIfOriginAllowed as jest.Mock).mockReturnValue(true);
         });
 
-        xdescribe('and "name" query parameter is incorrect or missed', () => {
+        describe('and "name" query parameter is incorrect or missed', () => {
             const incorrectEventQueryParamsArr = [
                 {
                     dummy: 'dummy',

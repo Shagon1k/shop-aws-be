@@ -26,7 +26,7 @@ const serverlessConfiguration: AWS = {
                 statements: [
                     {
                         /**
-                         * Note: Needed for get pre-signed URLs as it's generated based on
+                         * Note: Needed to get pre-signed URLs as it's generated based on
                          * the object's key, which requires listing the contents of the bucket.
                          */
                         Effect: 'Allow',

@@ -7,14 +7,12 @@ import { IMPORT_EXPIRATION_TIME } from '../../config';
 
 import { type EventGETAPIGatewayProxyEvent } from '@types';
 
-const { BUCKET_NAME = '', BUCKET_REGION = '', BUCKET_FOLDER_UPLOADED = 'uploaded' } = process.env;
-
-const MSG_IMPORT_SIGNED_URL_CREATED = 'Import signed url created successfully!';
+export const MSG_IMPORT_SIGNED_URL_CREATED = 'Import signed url created successfully!';
 const MSG_INVALID_FILE_NAME = 'Invalid file name passed.';
 
 const createS3Client = () =>
     new S3Client({
-        region: BUCKET_REGION,
+        region: process.env.BUCKET_REGION,
     });
 
 const importProductsFile: EventGETAPIGatewayProxyEvent<any, { name: string }> = async (event) => {
@@ -44,8 +42,8 @@ const importProductsFile: EventGETAPIGatewayProxyEvent<any, { name: string }> = 
         const signedUrl = await getSignedUrl(
             s3Client,
             new PutObjectCommand({
-                Bucket: BUCKET_NAME,
-                Key: `${BUCKET_FOLDER_UPLOADED}/${newFileName}`,
+                Bucket: process.env.BUCKET_NAME,
+                Key: `${process.env.BUCKET_FOLDER_UPLOADED}/${newFileName}`,
                 ContentType: 'text/csv',
             }),
             { expiresIn: IMPORT_EXPIRATION_TIME }

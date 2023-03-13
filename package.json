@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Aliaksei Hurynovich AWS Shop server part",
   "scripts": {
-    "deploy:product-service": "cd product-service && npm run deploy"
+    "deploy:product-service": "cd product-service && npm run deploy",
+    "deploy:import-service": "cd import-service && npm run deploy"
   },
   "repository": {
     "type": "git",

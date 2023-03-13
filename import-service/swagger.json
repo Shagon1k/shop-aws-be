@@ -1,0 +1,98 @@
+{
+    "openapi":"3.0.2",
+    "info": {
+      "title":"Aliaksei Hurynovich AWS Import Service API",
+      "description": "Documentation of AWS Import Service API (Coffee shop)",
+      "contact": {
+        "email": "shagon1k@gmail.com"
+      },
+      "version":"1.0"
+    },
+    "servers": [{
+        "url": "https://1yls2gee5l.execute-api.eu-west-1.amazonaws.com/dev",
+        "description": "Main Import Service server"
+    }],
+    "paths": {
+        "/import": {
+            "get": {
+                "description": "Start import new CSV of products list",
+                "parameters": [{
+                    "name": "name",
+                    "description": "New file name",
+                    "required": true,
+                    "in": "query",
+                    "schema": {
+                        "type": "string",
+                        "example": "my-file-name.csv"
+                    },
+                    "examples": {
+                        "found": {
+                            "description": "200 - Success, return signed URL to upload",
+                            "value": "signedUrlExample"
+                        },
+                        "not-found": {
+                            "description": "400 - Bad Request"
+                        }
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "AWS S3 Signed URL for import",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": ["message", "data"],
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request error (e.g. file name parameter missed)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Error": {
+                "required": ["message"],
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "stack": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

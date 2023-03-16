@@ -1,12 +1,12 @@
+import getProductsDbController from '@libs/products-db-controller'
 import { prepareResponse, checkIfOriginAllowed } from '@libs/api-gateway';
-import { type EventGETAPIGatewayProxyEvent } from '@types';
 import { BaseError, NotFoundError } from '@libs/errors';
 import { RESP_STATUS_CODES } from '@constants';
-// Note: Mocked data used temporary
-import { products } from '../../mocks/products.mock';
 
-export const MSG_PRODUCT_FOUND = 'Coffee product found.';
-export const MSG_PRODUCT_NOT_FOUND = 'No coffee product with such ID.';
+import { type EventGETAPIGatewayProxyEvent } from '@types';
+
+export const MSG_PRODUCT_FOUND = 'Coffee Shop product found.';
+export const MSG_PRODUCT_NOT_FOUND = 'No Coffee Shop product with such ID.';
 
 export type AddProductPathParams = {
     productId: string;
@@ -14,10 +14,7 @@ export type AddProductPathParams = {
 
 const getProductById: EventGETAPIGatewayProxyEvent<AddProductPathParams> = async (event) => {
     const requestOrigin = event.headers.origin || '';
-
     try {
-        console.log('Get product by ID Lambda triggered, params: ', event.pathParameters);
-
         // CORS not allowed fast return
         if (!checkIfOriginAllowed(requestOrigin)) {
             return prepareResponse(
@@ -29,16 +26,21 @@ const getProductById: EventGETAPIGatewayProxyEvent<AddProductPathParams> = async
             );
         }
 
-        const productId = event?.pathParameters?.productId || '';
-        const productData = products.find(({ id }) => id === productId);
-        if (!productData) {
+        // Request handle
+        const params = event.pathParameters;
+        console.log('Get product by ID Lambda triggered, params: ', params);
+
+        const productId = params?.productId || '';
+        const resultData = await getProductsDbController().getProductById(productId);
+
+        if (!resultData) {
             throw new NotFoundError(MSG_PRODUCT_NOT_FOUND);
         }
 
         return prepareResponse(
             {
                 message: MSG_PRODUCT_FOUND,
-                data: productData,
+                data: resultData,
             },
             requestOrigin,
             RESP_STATUS_CODES.OK

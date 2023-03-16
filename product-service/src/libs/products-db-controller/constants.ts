@@ -1,0 +1,1 @@
+export const DEFAULT_ITEM_STOCK_COUNT = 10;

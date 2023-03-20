@@ -1,4 +1,5 @@
 import { S3Client, GetObjectCommand, CopyObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { Readable } from 'stream';
 import csvParser from 'csv-parser';
 import { RESP_STATUS_CODES } from '@constants';
@@ -6,6 +7,8 @@ import { RESP_STATUS_CODES } from '@constants';
 import { type EventS3Event } from '@types';
 
 const {
+    SQS_REGION = '',
+    SQS_URL,
     BUCKET_REGION = '',
     BUCKET_FOLDER_UPLOADED = 'uploaded',
     BUCKET_FOLDER_PARSED = 'parsed',
@@ -14,6 +17,11 @@ const {
 const MSG_NO_RECORDS = 'No S3 records.';
 const MSG_NO_READABLE_STREAM = 'No readable stream from S3 object.';
 const MSG_ERROR_DURING_READ_STREAM = 'Error during stream read.';
+
+const prepareProductData = (data: { price?: String }) => ({
+    ...data,
+    price: data.price ? Number(data.price) : undefined,
+})
 
 const createS3Client = () =>
     new S3Client({
@@ -31,6 +39,8 @@ const importFileParser: EventS3Event = async (event) => {
         }
 
         const s3Client = createS3Client();
+        const sqsClient = new SQSClient({ region: SQS_REGION });
+
         const recordsParsePromises = records.map(async (record, recordIndex) => {
             const {
                 s3: {
@@ -64,8 +74,15 @@ const importFileParser: EventS3Event = async (event) => {
                 s3StreamBody
                     .pipe(csvParser())
                     .on('data', (data) => {
-                        // TODO: Will be handled in the next task
-                        console.log(RECORD_INFO, `Parsing product import CSV data: `, data);
+                        console.log(RECORD_INFO, `Parsed product import CSV data: `, data);
+                        console.log(RECORD_INFO, 'Sending queue message to create new product.');
+
+                        sqsClient.send(
+                            new SendMessageCommand({
+                                MessageBody: JSON.stringify(prepareProductData(data)),
+                                QueueUrl: SQS_URL,
+                            })
+                        );
                     })
                     .on('error', (error) => {
                         console.error(RECORD_INFO, `Parsing error for product import CSV data: `, error);

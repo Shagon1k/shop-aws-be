@@ -1,25 +1,16 @@
 import getProductsDbController from '@libs/products-db-controller';
 import { prepareResponse, checkIfOriginAllowed } from '@libs/api-gateway';
 import { BaseError, BadRequestError } from '@libs/errors';
+import { isValidCreateProductBody } from '@libs/is-valid-create-product-body';
 import { RESP_STATUS_CODES } from '@constants';
 
-import { type EventPOSTAPIGatewayProxyEvent, type CreateProductBody } from '@types';
+import { type EventPOSTAPIGatewayProxyEvent } from '@types';
 
 export const MSG_PRODUCT_CREATED = 'Created new Coffee Shop product.';
 export const MSG_INVALID_PRODUCT_DATA = 'Invalid new Coffee Shop product data.';
 
-const isValidCreateProductBody = (data: any): data is CreateProductBody => {
-    const { title, description, price, img_url } = data;
 
-    return (
-        typeof title === 'string' &&
-        typeof description === 'string' &&
-        typeof img_url === 'string' &&
-        Number.isFinite(price)
-    );
-};
-
-const getProductById: EventPOSTAPIGatewayProxyEvent<string> = async (event) => {
+const createProduct: EventPOSTAPIGatewayProxyEvent<string> = async (event) => {
     const requestOrigin = event.headers.origin || '';
     try {
         // CORS not allowed fast return
@@ -70,4 +61,4 @@ const getProductById: EventPOSTAPIGatewayProxyEvent<string> = async (event) => {
     }
 };
 
-export default getProductById;
+export default createProduct;

@@ -1,4 +1,4 @@
-import { getProductsList, getProductById, createProduct } from '@functions';
+import { getProductsList, getProductById, createProduct, catalogBatchProcess } from '@functions';
 
 import type { AWS } from '@serverless/typescript';
 
@@ -16,6 +16,9 @@ const serverlessConfiguration: AWS = {
         environment: {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
             NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+            SQS_URL: {
+                Ref: 'SQSQueue'
+            }
         },
         iam: {
             role: {
@@ -29,7 +32,38 @@ const serverlessConfiguration: AWS = {
                             'arn:aws:dynamodb:eu-west-1:739296314197:table/coffee-shop-stocks/index/product_id-index',
                         ],
                     },
+                    {
+                        Effect: 'Allow',
+                        Action: ['sqs:*'],
+                        Resource: [
+                            {
+                                'Fn::GetAtt': ['SQSQueue', 'Arn']
+                            }
+                        ],
+                    },
                 ],
+            },
+        },
+    },
+    resources: {
+        Resources: {
+            SQSQueue: {
+                Type: 'AWS::SQS::Queue',
+                Properties: {
+                    QueueName: 'catalogItemsQueue',
+                },
+            },
+        },
+        Outputs: {
+            SQSQueueArn: {
+                Value: {
+                    'Fn::GetAtt': ['SQSQueue', 'Arn'],
+                },
+            },
+            SQSQueue: {
+                Value: {
+                    Ref: 'SQSQueue',
+                },
             },
         },
     },
@@ -37,6 +71,7 @@ const serverlessConfiguration: AWS = {
         getProductsList,
         getProductById,
         createProduct,
+        catalogBatchProcess,
     },
     package: { individually: true },
     custom: {

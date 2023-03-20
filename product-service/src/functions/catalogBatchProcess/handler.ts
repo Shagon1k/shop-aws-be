@@ -44,9 +44,9 @@ const catalogBatchProcess: EventSQSEvent = async (event) => {
                         Subject: 'New coffee was added!',
                         Message: `New coffee was added. Coffee info: ${JSON.stringify(createdData)}`,
                         MessageAttributes: {
-                            isStarbucks: {
+                            is_starbucks: {
                                 DataType: 'String',
-                                StringValue: JSON.stringify(isStarbucks),
+                                StringValue: String(isStarbucks),
                             },
                         },
                     })

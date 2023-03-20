@@ -84,7 +84,7 @@ const serverlessConfiguration: AWS = {
                         Ref: 'SNSTopic',
                     },
                     FilterPolicy: {
-                        isStarbucks: ['true']
+                        is_starbucks: ['true']
                     },
                 },
             },

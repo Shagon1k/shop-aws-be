@@ -17,8 +17,15 @@ const serverlessConfiguration: AWS = {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
             NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
             SQS_URL: {
-                Ref: 'SQSQueue'
-            }
+                Ref: 'SQSQueue',
+            },
+            SNS_ARN: {
+                /**
+                 * Note: If your SNS topic doesn't yet exist but is defined in the serverless.ts
+                 * file you're editing, you'll need to use Fn::Ref or !Ref to get the ARN.
+                 */
+                Ref: 'SNSTopic',
+            },
         },
         iam: {
             role: {
@@ -37,8 +44,17 @@ const serverlessConfiguration: AWS = {
                         Action: ['sqs:*'],
                         Resource: [
                             {
-                                'Fn::GetAtt': ['SQSQueue', 'Arn']
-                            }
+                                'Fn::GetAtt': ['SQSQueue', 'Arn'],
+                            },
+                        ],
+                    },
+                    {
+                        Effect: 'Allow',
+                        Action: ['sns:*'],
+                        Resource: [
+                            {
+                                Ref: 'SNSTopic',
+                            },
                         ],
                     },
                 ],
@@ -51,6 +67,35 @@ const serverlessConfiguration: AWS = {
                 Type: 'AWS::SQS::Queue',
                 Properties: {
                     QueueName: 'catalogItemsQueue',
+                },
+            },
+            SNSTopic: {
+                Type: 'AWS::SNS::Topic',
+                Properties: {
+                    TopicName: 'CreateProductTopic',
+                },
+            },
+            SubscriptionIsStarbucks: {
+                Type: 'AWS::SNS::Subscription',
+                Properties: {
+                    Endpoint: 'shagon1k@gmail.com',
+                    Protocol: 'email',
+                    TopicArn: {
+                        Ref: 'SNSTopic',
+                    },
+                    FilterPolicy: {
+                        isStarbucks: ['true']
+                    },
+                },
+            },
+            SubscriptionIsNotStarbucks: {
+                Type: 'AWS::SNS::Subscription',
+                Properties: {
+                    Endpoint: 'shagon2k@gmail.com',
+                    Protocol: 'email',
+                    TopicArn: {
+                        Ref: 'SNSTopic',
+                    },
                 },
             },
         },

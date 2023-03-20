@@ -6,10 +6,10 @@ import { DEFAULT_ITEM_STOCK_COUNT } from '../constants';
 import { type CreatedProductData, type CreatedStockData } from '@types';
 import { type IProductsDBController } from '../products-db-controller';
 
-const { DB_REGION, DYNAMO_PRODUCTS_TABLE_NAME, DYNAMO_STOCKS_TABLE_NAME, DYNAMO_STOCKS_PRODUCT_ID_INDEX } =
+const { REGION, DYNAMO_PRODUCTS_TABLE_NAME, DYNAMO_STOCKS_TABLE_NAME, DYNAMO_STOCKS_PRODUCT_ID_INDEX } =
     process.env;
 
-const createDbClient = () => new DynamoDBClient({ region: DB_REGION });
+const createDbClient = () => new DynamoDBClient({ region: REGION });
 
 const productsDbDynamoAdapter: IProductsDBController = {
     async getProductsList() {

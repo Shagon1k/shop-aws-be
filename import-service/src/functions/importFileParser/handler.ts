@@ -7,9 +7,8 @@ import { RESP_STATUS_CODES } from '@constants';
 import { type EventS3Event } from '@types';
 
 const {
-    SQS_REGION = '',
+    REGION = '',
     SQS_URL,
-    BUCKET_REGION = '',
     BUCKET_FOLDER_UPLOADED = 'uploaded',
     BUCKET_FOLDER_PARSED = 'parsed',
 } = process.env;
@@ -21,12 +20,7 @@ const MSG_ERROR_DURING_READ_STREAM = 'Error during stream read.';
 const prepareProductData = (data: { price?: String }) => ({
     ...data,
     price: data.price ? Number(data.price) : undefined,
-})
-
-const createS3Client = () =>
-    new S3Client({
-        region: BUCKET_REGION,
-    });
+});
 
 const importFileParser: EventS3Event = async (event) => {
     try {
@@ -38,8 +32,8 @@ const importFileParser: EventS3Event = async (event) => {
             throw new Error(MSG_NO_RECORDS);
         }
 
-        const s3Client = createS3Client();
-        const sqsClient = new SQSClient({ region: SQS_REGION });
+        const s3Client = new S3Client({ region: REGION });
+        const sqsClient = new SQSClient({ region: REGION });
 
         const recordsParsePromises = records.map(async (record, recordIndex) => {
             const {

@@ -20,6 +20,7 @@ const serverlessConfiguration: AWS = {
             // Note: Alternatively, env variables could be re-defined here using only 'useDotenv', than sls-dotenv-plugin could be removed.
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
             NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+            SQS_URL: '${cf:product-service-dev.SQSQueue}',
         },
         iam: {
             role: {
@@ -37,6 +38,13 @@ const serverlessConfiguration: AWS = {
                         Effect: 'Allow',
                         Action: ['s3:PutObject', 's3:GetObject', 's3:CopyObject', 's3:DeleteObject'],
                         Resource: ['arn:aws:s3:::epam-course-products-import/*'],
+                    },
+                    {
+                        Effect: 'Allow',
+                        Action: ['sqs:*'],
+                        Resource: [
+                            '${cf:product-service-dev.SQSQueueArn}'
+                        ],
                     },
                 ],
             },

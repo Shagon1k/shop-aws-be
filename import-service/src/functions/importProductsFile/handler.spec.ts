@@ -76,7 +76,7 @@ describe('importProductsFile lambda', () => {
             beforeAll(() => {
                 process.env = {
                     BUCKET_NAME: mockedBucketName,
-                    BUCKET_REGION: mockedBucketRegion,
+                    REGION: mockedBucketRegion,
                     BUCKET_FOLDER_UPLOADED: mockedUploadedFolder,
                 };
                 (getSignedUrl as jest.Mock).mockResolvedValue(mockedSignedUrl);

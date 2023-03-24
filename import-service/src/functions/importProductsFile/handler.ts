@@ -10,11 +10,6 @@ import { type EventGETAPIGatewayProxyEvent } from '@types';
 export const MSG_IMPORT_SIGNED_URL_CREATED = 'Import signed url created successfully!';
 const MSG_INVALID_FILE_NAME = 'Invalid file name passed.';
 
-const createS3Client = () =>
-    new S3Client({
-        region: process.env.BUCKET_REGION,
-    });
-
 const importProductsFile: EventGETAPIGatewayProxyEvent<any, { name: string }> = async (event) => {
     const requestOrigin = event.headers.origin || '';
     try {
@@ -37,7 +32,7 @@ const importProductsFile: EventGETAPIGatewayProxyEvent<any, { name: string }> = 
             throw new BadRequestError(MSG_INVALID_FILE_NAME);
         }
 
-        const s3Client = createS3Client();
+        const s3Client = new S3Client({ region: process.env.REGION });
 
         const signedUrl = await getSignedUrl(
             s3Client,

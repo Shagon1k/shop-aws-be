@@ -1,4 +1,4 @@
-import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
+import type { APIGatewayProxyEvent, APIGatewayProxyResult, SQSEvent, Handler, } from 'aws-lambda';
 
 type POSTAPIGatewayProxyEvent<S> = Omit<APIGatewayProxyEvent, 'body'> & { body: S };
 export type EventPOSTAPIGatewayProxyEvent<S> = Handler<POSTAPIGatewayProxyEvent<S>, APIGatewayProxyResult>;
@@ -11,6 +11,8 @@ export type EventGETAPIGatewayProxyEvent<P = void, Q = void> = Handler<
     GETAPIGatewayProxyEvent<P, Q>,
     APIGatewayProxyResult
 >;
+
+export type EventSQSEvent = Handler<SQSEvent>;
 
 export interface CreateProductBody {
     title: string;

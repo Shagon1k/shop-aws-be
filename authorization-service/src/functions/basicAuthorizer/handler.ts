@@ -49,8 +49,8 @@ const basicAuthorizer: APIGatewayTokenAuthorizerHandler = async (event) => {
     const [username, password] = decodedCredentials.split(':');
     console.log(`Credentials for ${username} passed correct.`);
 
-    const isCredsValue = checkCredsValid(username, password);
-    return generatePolicy(passedToken, methodArn, isCredsValue ? AUTH_EFFECTS.ALLOW : AUTH_EFFECTS.DENY);
+    const isCredsValid = checkCredsValid(username, password);
+    return generatePolicy(passedToken, methodArn, isCredsValid ? AUTH_EFFECTS.ALLOW : AUTH_EFFECTS.DENY);
 };
 
 export default basicAuthorizer;

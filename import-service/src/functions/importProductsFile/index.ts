@@ -14,6 +14,13 @@ export default {
                             name: true
                         }
                     }
+                },
+                authorizer: {
+                    name: 'basicAuthorizer',
+                    arn: '${cf:authorization-service-dev.BasicAuthorizerLambdaFunctionQualifiedArn}',
+                    identitySource: 'method.request.header.Authorization',
+                    type: 'token',
+                    identityValidationExpression: 'Basic [A-Za-z0-9+/=]+'
                 }
             },
         },

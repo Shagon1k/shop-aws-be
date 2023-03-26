@@ -42,11 +42,75 @@ const serverlessConfiguration: AWS = {
                     {
                         Effect: 'Allow',
                         Action: ['sqs:*'],
-                        Resource: [
-                            '${cf:product-service-dev.SQSQueueArn}'
-                        ],
+                        Resource: ['${cf:product-service-dev.SQSQueueArn}'],
                     },
                 ],
+            },
+        },
+    },
+    resources: {
+        Resources: {
+            GatewayResponseDefault400: {
+                Type: 'AWS::ApiGateway::GatewayResponse',
+                Properties: {
+                    ResponseParameters: {
+                        'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+                        'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+                    },
+                    ResponseType: 'DEFAULT_4XX',
+                    RestApiId: { Ref: 'ApiGatewayRestApi' },
+                },
+            },
+            GatewayResponseAccessDenied: {
+                Type: 'AWS::ApiGateway::GatewayResponse',
+                Properties: {
+                    ResponseType: 'ACCESS_DENIED',
+                    ResponseParameters: {
+                        'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+                        'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+                    },
+                    RestApiId: { Ref: 'ApiGatewayRestApi' },
+                },
+            },
+            GatewayResponseUnauthorized: {
+                Type: 'AWS::ApiGateway::GatewayResponse',
+                Properties: {
+                    ResponseType: 'UNAUTHORIZED',
+                    ResponseParameters: {
+                        'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+                        'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+                    },
+                    RestApiId: { Ref: 'ApiGatewayRestApi' },
+                    ResponseTemplates: {
+                        'application/json': '{ "message": $context.error.messageString }',
+                    },
+                },
+            },
+            GatewayResponseDefault500: {
+                Type: 'AWS::ApiGateway::GatewayResponse',
+                Properties: {
+                    RestApiId: { Ref: 'ApiGatewayRestApi' },
+                    ResponseType: 'DEFAULT_5XX',
+                    ResponseParameters: {
+                        'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+                        'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+                    },
+                    ResponseTemplates: {
+                        'application/json': '{ "message": $context.error.messageString }',
+                    },
+                },
+            },
+            AuthFailureGatewayResponse: {
+                Type: 'AWS::ApiGateway::GatewayResponse',
+                Properties: {
+                    ResponseParameters: {
+                        'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+                        'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+                    },
+                    ResponseType: 'UNAUTHORIZED',
+                    RestApiId: { Ref: 'ApiGatewayRestApi' },
+                    StatusCode: '401',
+                },
             },
         },
     },

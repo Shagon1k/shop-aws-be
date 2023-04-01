@@ -5,7 +5,8 @@
   "scripts": {
     "deploy:product-service": "cd product-service && npm run deploy",
     "deploy:import-service": "cd import-service && npm run deploy",
-    "deploy:authorization-service": "cd authorization-service && npm run deploy"
+    "deploy:authorization-service": "cd authorization-service && npm run deploy",
+    "deploy:cart-service": "cd cart-service && npm run deploy"
   },
   "repository": {
     "type": "git",

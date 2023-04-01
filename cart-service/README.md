@@ -1,4 +1,4 @@
-**Note:** This one is forked part from https://github.com/boale/rs-cart-api
+**Note:** This one is based on forked part from https://github.com/boale/rs-cart-api
 
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>

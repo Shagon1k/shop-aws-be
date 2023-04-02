@@ -40,7 +40,7 @@ export class CartService {
 
   async findOrCreateByUserId(userId: string): Promise<ICart> {
     const userCart = await this.cartRepository.findOne({
-      where: { userId: userId },
+      where: { userId: userId, status: CartStatus.OPEN },
     });
     const cartItems = await this.cartItemRepository.find({
       where: { cartId: userCart?.id },

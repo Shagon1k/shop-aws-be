@@ -22,6 +22,7 @@ export class CartService {
   async findByUserId(userId: string): Promise<ICart> {
     const userCart = await this.cartRepository.findOne({
       where: { userId: userId },
+      relations: ['items', 'items.product']
     });
 
     return userCart;

@@ -10,8 +10,6 @@ import { Cart as ICart, CartUpdate as ICartUpdate } from '../models';
 
 @Injectable()
 export class CartService {
-  private userCarts: Record<string, ICart> = {};
-
   constructor(
     @InjectRepository(Cart)
     private readonly cartRepository: Repository<Cart>,
@@ -21,8 +19,12 @@ export class CartService {
     private readonly productRepository: Repository<Product>,
   ) {}
 
-  findByUserId(userId: string): ICart {
-    return this.userCarts[userId];
+  async findByUserId(userId: string): Promise<ICart> {
+    const userCart = await this.cartRepository.findOne({
+      where: { userId: userId },
+    });
+
+    return userCart;
   }
 
   async createByUserId(userId: string) {

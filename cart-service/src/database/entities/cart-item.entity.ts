@@ -15,11 +15,11 @@ export class CartItem {
     cart => cart.items,
     { onDelete: 'CASCADE' },
   )
-  @JoinColumn({ name: 'cart_id' })
+  @JoinColumn({ name: 'cart_id', referencedColumnName: 'id' })
   cart: Cart;
 
   @ManyToOne(() => Product)
-  @JoinColumn({ name: 'product_id' })
+  @JoinColumn({ name: 'product_id', referencedColumnName: 'id' })
   product: Product;
 
   @Column({ type: 'integer', default: 1 })

@@ -15,7 +15,7 @@ export class Cart {
   userId: string;
 
   @OneToMany(() => CartItem, (item) => item.cart, { cascade: true })
-  @JoinColumn()
+  @JoinColumn({ name: 'id', referencedColumnName: 'cart_id'})
   items: CartItem[];
 
   @Column({ type: 'date', default: () => 'now()' })

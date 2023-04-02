@@ -20,7 +20,7 @@ export class Order {
   cartId: string;
 
   @OneToMany(() => CartItem, (item) => item.cart)
-  @JoinColumn({ name: 'cartId' })
+  @JoinColumn({ name: 'cart_id' })
   items: CartItem[];
 
   @Column({ type: 'jsonb' })

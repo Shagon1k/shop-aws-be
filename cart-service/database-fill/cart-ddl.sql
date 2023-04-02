@@ -27,3 +27,18 @@ create table if not exists users (
    name text not null,           -- user's name
    password text not null		  -- user's password
 );
+
+-- Orders table creation
+DROP TABLE if exists orders
+create table if not exists orders (
+	id uuid primary key default uuid_generate_v4(),
+	user_id uuid,
+	foreign key ("user_id") references "users" ("id"),
+	cart_id uuid,
+	foreign key ("cart_id") references "carts" ("id"),
+	payment jsonb,
+	delivery jsonb,
+	comments text,
+	status status_enum default 'OPEN',
+	total integer not null
+);

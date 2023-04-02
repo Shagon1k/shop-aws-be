@@ -20,15 +20,12 @@ import { CartService } from './services';
 import { CartItemUpdate } from './models';
 
 const validateBodyItems = (items: CartItemUpdate[]) => {
-  return items?.every(
-    ({ count, productId }) => {
-      const isValidCartItem =
-        Number.isFinite(count) &&
-        typeof productId === 'string'
+  return items?.every(({ count, productId }) => {
+    const isValidCartItem =
+      Number.isFinite(count) && typeof productId === 'string';
 
-        return isValidCartItem
-    },
-  );
+    return isValidCartItem;
+  });
 };
 
 @Controller('api/profile/cart')
@@ -55,27 +52,27 @@ export class CartController {
   @UseGuards(BasicAuthGuard)
   @Put()
   async updateUserCart(@Req() req: AppRequest, @Body() body) {
-    const isItemsValid = validateBodyItems(body.items)
+    const isItemsValid = validateBodyItems(body.items);
 
     if (isItemsValid) {
-        const cart = await this.cartService.updateByUserId(
-            getUserIdFromRequest(req),
-            body,
-          );
+      const cart = await this.cartService.updateByUserId(
+        getUserIdFromRequest(req),
+        body,
+      );
 
-          return {
-            statusCode: HttpStatus.OK,
-            message: 'OK',
-            data: {
-              cart,
-              total: calculateCartTotal(cart),
-            },
-          };
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'OK',
+        data: {
+          cart,
+          total: calculateCartTotal(cart),
+        },
+      };
     } else {
-        return {
-            statusCode: HttpStatus.BAD_REQUEST,
-            message: 'Invalid items passed.'
-        }
+      return {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'Invalid items passed.',
+      };
     }
   }
 
@@ -92,9 +89,14 @@ export class CartController {
 
   @UseGuards(BasicAuthGuard)
   @Post('checkout')
-  async checkout(@Req() req: AppRequest) {
+  async checkout(@Req() req: AppRequest, @Body() body) {
     const userId = getUserIdFromRequest(req);
     const cart = await this.cartService.findByUserId(userId);
+    const {
+      payment = { type: 'Dummy payment type' },
+      delivery = { type: 'Dummy delivery type', address: 'Dummy address' },
+      comments = 'Dummy Comment',
+    } = body;
 
     if (!(cart && cart.items.length)) {
       const statusCode = HttpStatus.BAD_REQUEST;
@@ -112,6 +114,9 @@ export class CartController {
       userId,
       cartId,
       total,
+      payment,
+      delivery,
+      comments,
     });
 
     return {

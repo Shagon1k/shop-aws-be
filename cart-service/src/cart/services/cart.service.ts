@@ -21,7 +21,7 @@ export class CartService {
 
   async findByUserId(userId: string): Promise<ICart> {
     const userCart = await this.cartRepository.findOne({
-      where: { userId: userId },
+      where: { userId: userId, status: CartStatus.OPEN },
       relations: ['items', 'items.product']
     });
 
@@ -66,16 +66,24 @@ export class CartService {
           where: { cartId: cartId, productId: item.productId },
         });
 
-        if (!cartItem) {
-          const product = await this.productRepository.findOne(item.productId);
-          cartItem = new CartItem();
-          cartItem.cart = { id: cartId } as Cart;
-          cartItem.product = product;
+        if (cartItem) {
+            console.log('cartItem', cartItem)
+            console.log('item', item)
+            if (item.count > 0) {
+                cartItem.count = item.count
+                await this.cartItemRepository.save(cartItem);
+            } else {
+                await this.cartItemRepository.remove(cartItem);
+            }
+        } else {
+            const product = await this.productRepository.findOne(item.productId);
+            cartItem = new CartItem();
+            cartItem.cart = { id: cartId } as Cart;
+            cartItem.product = product;
+            cartItem.count = item.count;
+
+            await this.cartItemRepository.save(cartItem);
         }
-
-        cartItem.count = item.count;
-
-        await this.cartItemRepository.save(cartItem);
       }),
     );
 
@@ -83,6 +91,8 @@ export class CartService {
       where: { cartId: cartId },
       relations: ['product'],
     });
+
+    console.log('UPDATED', updatedItems)
 
     return { id: cartId, items: updatedItems };
   }

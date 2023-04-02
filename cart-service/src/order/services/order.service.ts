@@ -40,13 +40,15 @@ export class OrderService {
       newOrder.items.forEach(item => (item.cart = cart));
       newOrder.total = orderData.total;
       newOrder.status = CartStatus.ORDERED;
-      newOrder.comments = 'Dummy comment';
+      newOrder.comments = orderData.comments;
       newOrder.payment = {
         type: 'Dummy payment type',
+        ...orderData.payment
       };
       newOrder.delivery = {
         type: 'Dummy delivery type',
         address: 'Dummy address',
+        ...orderData.delivery
       };
 
       const createdOrder = await entityManager.save(newOrder);

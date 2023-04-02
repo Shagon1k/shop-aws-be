@@ -21,3 +21,6 @@ SELECT * FROM carts
 
 -- All Cart items selection
 SELECT * FROM cart_items
+
+-- All Users selection
+SELECT * FROM users

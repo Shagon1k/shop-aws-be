@@ -19,3 +19,11 @@ create table if not exists cart_items (
    product_id uuid, 									-- product item id
    count integer not null default 1             		-- product item's count
 )
+
+-- Users table creation
+DROP TABLE if exists users
+create table if not exists users (
+   id uuid primary key default uuid_generate_v4(),
+   name text not null,           -- user's name
+   password text not null		  -- user's password
+);

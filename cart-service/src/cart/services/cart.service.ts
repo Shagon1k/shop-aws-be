@@ -22,7 +22,7 @@ export class CartService {
   async findByUserId(userId: string): Promise<ICart> {
     const userCart = await this.cartRepository.findOne({
       where: { userId: userId, status: CartStatus.OPEN },
-      relations: ['items', 'items.product']
+      relations: ['items', 'items.product'],
     });
 
     return userCart;
@@ -38,10 +38,18 @@ export class CartService {
     return this.cartRepository.save(cart);
   }
 
-  async findOrCreateByUserId(userId: string): Promise<ICart> {
-    const userCart = await this.cartRepository.findOne({
-      where: { userId: userId, status: CartStatus.OPEN },
-    });
+  async findOrCreateByUserId(userId: string, cartId?: string): Promise<ICart> {
+    let userCart;
+
+    if (cartId) {
+      // if cart id was passed - get cart by id
+      userCart = await this.cartRepository.findOne(cartId);
+    } else {
+      // if cart id was NOT passed - get user's OPEN cart
+      userCart = await this.cartRepository.findOne({
+        where: { userId: userId, status: CartStatus.OPEN },
+      });
+    }
     const cartItems = await this.cartItemRepository.find({
       where: { cartId: userCart?.id },
       relations: ['product'],
@@ -67,22 +75,20 @@ export class CartService {
         });
 
         if (cartItem) {
-            console.log('cartItem', cartItem)
-            console.log('item', item)
-            if (item.count > 0) {
-                cartItem.count = item.count
-                await this.cartItemRepository.save(cartItem);
-            } else {
-                await this.cartItemRepository.remove(cartItem);
-            }
-        } else {
-            const product = await this.productRepository.findOne(item.productId);
-            cartItem = new CartItem();
-            cartItem.cart = { id: cartId } as Cart;
-            cartItem.product = product;
+          if (item.count > 0) {
             cartItem.count = item.count;
-
             await this.cartItemRepository.save(cartItem);
+          } else {
+            await this.cartItemRepository.remove(cartItem);
+          }
+        } else {
+          const product = await this.productRepository.findOne(item.productId);
+          cartItem = new CartItem();
+          cartItem.cart = { id: cartId } as Cart;
+          cartItem.product = product;
+          cartItem.count = item.count;
+
+          await this.cartItemRepository.save(cartItem);
         }
       }),
     );
@@ -91,8 +97,6 @@ export class CartService {
       where: { cartId: cartId },
       relations: ['product'],
     });
-
-    console.log('UPDATED', updatedItems)
 
     return { id: cartId, items: updatedItems };
   }

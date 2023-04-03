@@ -38,8 +38,10 @@ export class CartController {
   @UseGuards(BasicAuthGuard)
   @Get()
   async findUserCart(@Req() req: AppRequest) {
+    const cartId = req.query.id as string || ''
     const cart = await this.cartService.findOrCreateByUserId(
       getUserIdFromRequest(req),
+      cartId
     );
 
     return {

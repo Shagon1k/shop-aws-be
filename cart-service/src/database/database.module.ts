@@ -1,3 +1,4 @@
+import * as dotenv from 'dotenv'
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-snake-naming-strategy';
@@ -6,6 +7,8 @@ import { CartItem } from './entities/cart-item.entity';
 import { Product } from './entities/product.entity';
 import { User } from './entities/user.entity';
 import { Order } from './entities/order.entity';
+
+dotenv.config()
 
 @Module({
   imports: [
